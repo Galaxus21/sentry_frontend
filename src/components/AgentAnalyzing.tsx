@@ -10,12 +10,18 @@ interface AgentAnalyzingProps {
 }
 
 const STEPS = [
-  { icon: Database, text: 'Crawling dark web & OSINT sources...' },
-  { icon: Server, text: 'Pulling financial filings from NSE/BSE...' },
-  { icon: Fingerprint, text: 'Screening OFAC & UN sanctions lists...' },
-  { icon: Server, text: 'Normalizing SLA and compliance data...' },
-  { icon: Cpu, text: 'LLM reasoning pass — interpreting all signals...' },
-  { icon: ShieldAlert, text: 'Computing weighted risk score...' }
+  { icon: Database, text: 'Initiating TorBot — scanning dark web marketplaces...' },
+  { icon: Database, text: 'Crawling onion directories for leaked credentials...' },
+  { icon: Server, text: 'Pulling financial filings from NSE/BSE via yfinance...' },
+  { icon: Server, text: 'Extracting quarterly revenue and debt ratios...' },
+  { icon: Fingerprint, text: 'Screening against OFAC sanctions database...' },
+  { icon: Fingerprint, text: 'Cross-referencing UN consolidated sanctions list...' },
+  { icon: Database, text: 'Scraping SEBI regulatory filings via Firecrawl...' },
+  { icon: Database, text: 'Checking GST compliance and filing history...' },
+  { icon: Server, text: 'Normalizing SLA performance across all regions...' },
+  { icon: Cpu, text: 'LLM reasoning pass — interpreting all signals in context...' },
+  { icon: Cpu, text: 'Applying weighted scoring: Financial 35%, Regulatory 25%...' },
+  { icon: ShieldAlert, text: 'Finalizing vendor risk posture and generating report...' }
 ];
 
 const AgentAnalyzing: React.FC<AgentAnalyzingProps> = ({ vendor }) => {
@@ -24,7 +30,7 @@ const AgentAnalyzing: React.FC<AgentAnalyzingProps> = ({ vendor }) => {
   useEffect(() => {
     const interval = setInterval(() => {
       setStepIndex((prev) => Math.min(prev + 1, STEPS.length - 1));
-    }, 1200);
+    }, 2500);
     return () => clearInterval(interval);
   }, []);
 

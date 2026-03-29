@@ -19,7 +19,7 @@ const VendorAnalysis = () => {
   useEffect(() => {
     if (!vendor) return;
     setPhase('analyzing');
-    const timer = setTimeout(() => setPhase('detail'), 7500);
+    const timer = setTimeout(() => setPhase('detail'), 32000);
     return () => clearTimeout(timer);
   }, [vendor]);
 
