@@ -47,7 +47,7 @@ const Index = () => {
             <div>
               <p className={css(styles.heroSub)}>Continuous vendor monitoring</p>
               <h1 className={css(styles.heroTitle)}>
-                Vendor risk intelligence with the calm clarity of the IDEA 2.0 visual language.
+                AI-powered vendor risk intelligence and continuous monitoring.
               </h1>
               <p className={css(styles.heroDesc)}>
                 Monitor financial, sanctions, SLA, and news signals in one clean command surface built for fast triage.
@@ -69,25 +69,6 @@ const Index = () => {
                     <p className={css(styles.statLabel)}>{item.label}</p>
                   </div>
                 ))}
-              </div>
-            </div>
-
-            <div className={css(styles.alertWindow)}>
-              <div className={css(styles.alertInner)}>
-                <p className={css(styles.alertLabel)}>Alert window</p>
-                <div className={css(styles.timerGrid)}>
-                  {[
-                    { value: '05', label: 'Days' },
-                    { value: '00', label: 'Hrs' },
-                    { value: '29', label: 'Min' },
-                    { value: '55', label: 'Sec' },
-                  ].map((item) => (
-                    <div key={item.label} className={css(styles.timerCard)}>
-                      <p className={css(styles.timerValue)}>{item.value}</p>
-                      <p className={css(styles.timerLabel)}>{item.label}</p>
-                    </div>
-                  ))}
-                </div>
               </div>
             </div>
           </div>
@@ -141,9 +122,6 @@ const styles = StyleSheet.create({
     display: 'grid',
     alignItems: 'center',
     gap: '32px',
-    '@media (min-width: 1024px)': {
-      gridTemplateColumns: '1.25fr 0.95fr',
-    },
   },
   heroSub: {
     fontSize: '14px',
