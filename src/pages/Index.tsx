@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { StyleSheet, css } from 'aphrodite';
 import { DashboardHeader, SummaryCards } from '@/components/DashboardHeader';
 import VendorTable from '@/components/VendorTable';
@@ -12,6 +13,11 @@ import { colors } from '@/theme';
 const Index = () => {
   const [selectedVendor, setSelectedVendor] = useState<Vendor | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const navigate = useNavigate();
+
+  const handleVendorSelect = (vendor: Vendor) => {
+    navigate(`/vendor/${vendor.id}`);
+  };
 
   const filteredVendors = useMemo(() => {
     const query = searchQuery.trim().toLowerCase();
@@ -33,7 +39,7 @@ const Index = () => {
 
   return (
     <div className={css(styles.appShell)}>
-      <DashboardHeader alertCount={3} searchQuery={searchQuery} onSearchChange={setSearchQuery} />
+      <DashboardHeader alertCount={3} searchQuery={searchQuery} onSearchChange={setSearchQuery} vendors={VENDORS} onVendorSelect={handleVendorSelect} />
 
       <main className={css(styles.main)}>
         <section className={css(styles.heroSection)}>

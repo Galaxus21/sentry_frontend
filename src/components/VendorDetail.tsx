@@ -43,7 +43,7 @@ const VendorDetail: React.FC<VendorDetailProps> = ({ vendor, onBack }) => {
               <h2 className={css(styles.title)}>{vendor.name}</h2>
               <span className={css(styles.riskBadge)} style={badgeStyles}>{level}</span>
             </div>
-            <p className={css(styles.metaText)}>{vendor.sector} • Continuous monitoring snapshot • Updated 2 hours ago</p>
+            <p className={css(styles.metaText)}>{vendor.sector} • Continuous monitoring snapshot • Updated just now</p>
           </div>
 
           <div className={css(styles.scoreCard)}>

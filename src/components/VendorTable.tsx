@@ -37,10 +37,10 @@ const VendorTable: React.FC<VendorTableProps> = ({ vendors, onSelect }) => (
             <th className={css(styles.th)}>Vendor Name</th>
             <th className={css(styles.th)}>Sector</th>
             <th className={css(styles.th)}>Overall Risk Score</th>
-            <th className={css(styles.th, styles.center)}>Financial</th>
-            <th className={css(styles.th, styles.center)}>Sanctions</th>
-            <th className={css(styles.th, styles.center)}>SLA</th>
-            <th className={css(styles.th, styles.center)}>News</th>
+            <th className={css(styles.th, styles.centerTh)}>Financial</th>
+            <th className={css(styles.th, styles.centerTh)}>Sanctions</th>
+            <th className={css(styles.th, styles.centerTh)}>SLA</th>
+            <th className={css(styles.th, styles.centerTh)}>News</th>
             <th className={css(styles.th)} />
           </tr>
         </thead>
@@ -187,6 +187,9 @@ const styles = StyleSheet.create({
   center: {
     display: 'flex',
     justifyContent: 'center',
+  },
+  centerTh: {
+    textAlign: 'center',
   },
   rightIcon: {
     color: colors.primary,

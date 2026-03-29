@@ -1,18 +1,42 @@
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import { StyleSheet, css } from 'aphrodite';
-import { Bell, Search, ShieldAlert } from 'lucide-react';
+import { Bell, Search, ShieldAlert, ChevronRight } from 'lucide-react';
 import { colors } from '@/theme';
+import type { Vendor } from '@/lib/vendorData';
 
 interface DashboardHeaderProps {
   alertCount: number;
   searchQuery: string;
   onSearchChange: (value: string) => void;
+  vendors: Vendor[];
+  onVendorSelect: (vendor: Vendor) => void;
 }
 
 
 
-const DashboardHeader: React.FC<DashboardHeaderProps> = ({ alertCount, searchQuery, onSearchChange }) => (
-  <>
+const DashboardHeader: React.FC<DashboardHeaderProps> = ({ alertCount, searchQuery, onSearchChange, vendors, onVendorSelect }) => {
+  const [isFocused, setIsFocused] = useState(false);
+
+  const suggestions = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    if (!q) return [];
+    return vendors.filter((v) =>
+      [v.name, v.sector].some((val) => val.toLowerCase().includes(q)),
+    );
+  }, [searchQuery, vendors]);
+
+  const showDropdown = isFocused && searchQuery.trim().length > 0;
+
+  const handleSelect = (vendor: Vendor) => {
+    setIsFocused(false);
+    onSearchChange('');
+    onVendorSelect(vendor);
+  };
+
+  const riskColor = (score: number) => score > 70 ? colors.destructive : score > 30 ? colors.warning : colors.success;
+  const riskBg = (score: number) => score > 70 ? 'hsla(356,89%,54%,0.1)' : score > 30 ? 'hsla(40,96%,51%,0.15)' : 'hsla(149,63%,42%,0.1)';
+
+  return (
     <header className={css(styles.header)}>
       <div className={css(styles.container)}>
         <div className={css(styles.logoBox)}>
@@ -31,10 +55,42 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({ alertCount, searchQue
             <input
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
+              onFocus={() => setIsFocused(true)}
+              onBlur={() => setTimeout(() => setIsFocused(false), 200)}
               type="text"
               placeholder="Search vendors"
               className={css(styles.searchInput)}
             />
+            {showDropdown && (
+              <div className={css(styles.dropdown)}>
+                {suggestions.length > 0 ? (
+                  suggestions.map((vendor) => (
+                    <button
+                      key={vendor.id}
+                      type="button"
+                      className={css(styles.dropdownItem)}
+                      onMouseDown={() => handleSelect(vendor)}
+                    >
+                      <div className={css(styles.dropdownLeft)}>
+                        <span className={css(styles.dropdownName)}>{vendor.name}</span>
+                        <span className={css(styles.dropdownSector)}>{vendor.sector}</span>
+                      </div>
+                      <div className={css(styles.dropdownRight)}>
+                        <span
+                          className={css(styles.dropdownScore)}
+                          style={{ color: riskColor(vendor.score), backgroundColor: riskBg(vendor.score) }}
+                        >
+                          {vendor.score}
+                        </span>
+                        <ChevronRight size={14} color={colors.mutedForeground} />
+                      </div>
+                    </button>
+                  ))
+                ) : (
+                  <div className={css(styles.noResults)}>No vendors found</div>
+                )}
+              </div>
+            )}
           </div>
 
           <button
@@ -50,8 +106,8 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({ alertCount, searchQue
         </div>
       </div>
     </header>
-  </>
-);
+  );
+};
 
 interface SummaryCardsProps {
   critical: number;
@@ -301,7 +357,72 @@ const styles = StyleSheet.create({
   progressBar: {
     height: '100%',
     borderRadius: '100px',
-  }
+  },
+  dropdown: {
+    position: 'absolute',
+    top: '56px',
+    left: 0,
+    right: 0,
+    backgroundColor: colors.card,
+    border: `1px solid ${colors.border}`,
+    borderRadius: '16px',
+    boxShadow: '0 16px 48px -12px rgba(0,0,0,0.15)',
+    zIndex: 100,
+    overflow: 'hidden',
+    maxHeight: '320px',
+    overflowY: 'auto',
+  },
+  dropdownItem: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    width: '100%',
+    padding: '14px 16px',
+    background: 'none',
+    border: 'none',
+    borderBottom: `1px solid ${colors.border}`,
+    cursor: 'pointer',
+    textAlign: 'left',
+    transition: 'background-color 0.15s',
+    ':hover': {
+      backgroundColor: colors.secondary,
+    },
+    ':last-child': {
+      borderBottom: 'none',
+    },
+  },
+  dropdownLeft: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '2px',
+  },
+  dropdownName: {
+    fontSize: '14px',
+    fontWeight: 600,
+    color: colors.foreground,
+  },
+  dropdownSector: {
+    fontSize: '12px',
+    color: colors.mutedForeground,
+  },
+  dropdownRight: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
+  },
+  dropdownScore: {
+    fontFamily: '"JetBrains Mono", monospace',
+    fontSize: '13px',
+    fontWeight: 700,
+    borderRadius: '100px',
+    padding: '4px 10px',
+  },
+  noResults: {
+    padding: '20px 16px',
+    textAlign: 'center',
+    fontSize: '14px',
+    color: colors.mutedForeground,
+  },
 });
 
 export { DashboardHeader, SummaryCards };
